@@ -2,8 +2,8 @@
 bench="reduction"
 
 # Create Logging directory
-mkdir ./../../data
-mkdir ./../../data/${bench}
+mkdir ./../../data_tmp
+mkdir ./../../data_tmp/${bench}
 
 save_path="./../../data/${bench}/c++"
 mkdir ${save_path}

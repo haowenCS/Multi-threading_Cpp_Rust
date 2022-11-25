@@ -25,8 +25,8 @@ $(OBJDIR)/%.o: %.cpp
 $(OBJDIR)/main.o: CycleTimer.h
  
 
-matmul:dirs $(OBJS) 
-		$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS) 		
+matmul-c++:dirs $(OBJS)
+		$(CXX) $(CXXFLAGS) -o ../bin/$@ $(OBJS) $(LDFLAGS)
 
 
                                                                                                       

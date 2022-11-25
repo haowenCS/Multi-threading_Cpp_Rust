@@ -1,8 +1,8 @@
 # Profiles for the given case
 
 # Create Logging directory
-mkdir ./../data
-mkdir ./../data/mandelbrot
+mkdir ./../data_tmp
+mkdir ./../data_tmp/mandelbrot
 
 save_path="./../../data/mandelbrot/rust"
 mkdir ${save_path}

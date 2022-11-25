@@ -12,23 +12,7 @@ exec_c="matmul-c++"
 # Make sure executable is present in the given path
 c_exec_path="./../../C++/bin"
 
-# Run Serial first
-cc="-c 1"
-
 size=(1024 2048)
-
-echo "--------------------------------------------------------------------------"
-echo " Performing serial runs"
-echo "--------------------------------------------------------------------------"
-for s in 0 1
-do
-  flag="-s ${size[${s}]} -r 3"
-  echo "${c_exec_path}/${exec_c} ${flag} ${cc} > ${save_path}/thread_0_${size[${s}]}.log"
-  ${c_exec_path}/${exec_c} ${flag} ${serial_cc} > ${save_path}/thread_0_${size[${s}]}.log
-done
-
-echo ""
-echo ""
 
 echo "--------------------------------------------------------------------------"
 echo "Performing Parallel Runs"

@@ -137,9 +137,11 @@ void do_runs(int size, int zorder, int numThreads, int code_config,
 
   memset(C_serial, 0, size * size * sizeof(int));
   double minSerial = 1e30;
+  double minSerial2 = 1e30;
 
   memset(C_parallel, 0, size * size * sizeof(int));
   double minThread = 1e30;
+  double minThread2 = 1e30;
 
   int *A = new int[size * size];
   int *B = new int[size * size];
@@ -148,18 +150,31 @@ void do_runs(int size, int zorder, int numThreads, int code_config,
   memcpy(B, A, size * size * sizeof(int));
 
   // Runs serial
-  if ((code_config == 0) || (code_config == 1)) {
+  if ((code_config == 0) || (code_config == 2)) {
     for (int i = 0; i < numRuns; ++i) {
       memset(C_serial, 0, size * size * sizeof(int));
 
       double startTime = CycleTimer::currentSeconds();
-      matmul_serial2(size, A, B, C_serial);
+      matmul_serial(size, A, B, C_serial);
       double endTime = CycleTimer::currentSeconds();
       minSerial = std::min(minSerial, endTime - startTime);
     }
 
-    printf("[matmul serial]:\t\t[%.3f] ms\n", minSerial * 1000);
+    printf("[matmul serial v1]:\t\t[%.3f] ms\n", minSerial * 1000);
+
+      for (int i = 0; i < numRuns; ++i) {
+          memset(C_serial, 0, size * size * sizeof(int));
+
+          double startTime = CycleTimer::currentSeconds();
+          matmul_serial2(size, A, B, C_serial);
+          double endTime = CycleTimer::currentSeconds();
+          minSerial2 = std::min(minSerial2, endTime - startTime);
+      }
+      printf("[matmul serial v2]:\t\t[%.3f] ms\n", minSerial2 * 1000);
+
   }
+
+  minSerial = std::min(minSerial, minSerial2);
 
   // Runs parallel versions
   if ((code_config == 0) || (code_config == 2)) {
@@ -174,7 +189,7 @@ void do_runs(int size, int zorder, int numThreads, int code_config,
     }
     printf("[matmul-c++ par_row]:\t\t[%.3f] ms\n", minThread * 1000);
 
-    if (code_config == 0) {
+    if (code_config == 2) {
       // compute speedup
       printf("++++\t\t\t\t(%.2fx speedup from %d threads)\n",
              minSerial / minThread, numThreads);
@@ -188,16 +203,16 @@ void do_runs(int size, int zorder, int numThreads, int code_config,
       memset(C_parallel, 0, size * size * sizeof(int));
 
       double startTime = CycleTimer::currentSeconds();
-      matmul_par_row(size, A, B, C_parallel, numThreads);
+      matmul_par_row_outer(size, A, B, C_parallel, numThreads);
       double endTime = CycleTimer::currentSeconds();
-      minThread = std::min(minThread, endTime - startTime);
+      minThread2 = std::min(minThread2, endTime - startTime);
     }
-    printf("[matmul-c++ par_outer]:\t\t[%.3f] ms\n", minThread * 1000);
+    printf("[matmul-c++ par_outer]:\t\t[%.3f] ms\n", minThread2 * 1000);
 
-    if (code_config == 0) {
+    if (code_config == 2) {
       // compute speedup
       printf("++++\t\t\t\t(%.2fx speedup from %d threads)\n",
-             minSerial / minThread, numThreads);
+             minSerial / minThread2, numThreads);
     }
   }
 

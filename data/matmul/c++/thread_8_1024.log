@@ -1,4 +1,8 @@
+[matmul serial v1]:		[1340.682] ms
+[matmul serial v2]:		[1574.440] ms
 Running Parallel over Row
-[matmul-c++ par_row]:		[304.454] ms
+[matmul-c++ par_row]:		[212.266] ms
+++++				(6.32x speedup from 8 threads)
 Running Parallel over outer loop
-[matmul-c++ par_outer]:		[297.789] ms
+[matmul-c++ par_outer]:		[286.718] ms
+++++				(4.68x speedup from 8 threads)
